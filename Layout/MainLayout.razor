@@ -1,0 +1,44 @@
+﻿@inherits LayoutComponentBase
+
+<BlazorBootstrapLayout StickyHeader="true">
+    <HeaderSection>
+        <ThemeSwitcher Class="ps-3 ps-lg-2"/>
+    </HeaderSection>
+
+    <SidebarSection>
+        <Sidebar2 Href="/"
+                  ImageSrc="/cabbage-icon-280.png"
+                  Title="Portfolio"
+                  BadgeText="2024.3"
+                  DataProvider="Sidebar2DataProvider"
+                  WidthUnit="Unit.Px"/>
+    </SidebarSection>
+
+    <ContentSection>
+        @Body
+    </ContentSection>
+</BlazorBootstrapLayout>
+
+@code {
+    private Offcanvas offcanvas = default!;
+    private async Task OnShowOffcanvasClick() => await offcanvas.ShowAsync();
+    
+    private IEnumerable<NavItem> navItems = default!;
+
+    private async Task<Sidebar2DataProviderResult> Sidebar2DataProvider(Sidebar2DataProviderRequest request) {
+        navItems ??= GetNavItems();
+
+        return await Task.FromResult(request.ApplyTo(navItems));
+    }
+
+    private IEnumerable<NavItem> GetNavItems() {
+        navItems = new List<NavItem> {
+            new NavItem { Id = "1", Href = "/#top", IconName = IconName.HouseDoorFill, Text = "Top", Match = NavLinkMatch.All },
+            new NavItem { Id = "2", Href = "/#prof", IconName = IconName.PlusSquareFill, Text = "Professional Projects" },
+            new NavItem { Id = "3", Href = "/#personal", IconName = IconName.Table, Text = "Personal Projects" },
+        };
+
+        return navItems;
+    }
+
+}
