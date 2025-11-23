@@ -23,33 +23,7 @@
     </h5>
     <br/>
     
-    @foreach (CardGroup group in GetProfItems()) {
-        <CardGroup>
-            @foreach (ProjectItem item in group.Items) {
-                <Card>
-                    @if (!string.IsNullOrEmpty(item.Src)) {
-                        <CardTitle class="generic-text" Style="margin-top: 5px">@item.Title</CardTitle>
-                        <Image Src="@item.FullSrc"/>
-                        <CardText Style="margin-left: 20px; margin-top: 10px; margin-bottom: 0">@item.Description</CardText>
-                        <CardBody>
-                            @if (item.Skills.Count > 0) {
-                                <Card>
-                                    <p class="model-text">Top Skills:</p>
-                                    <div class="model-value">
-                                        @foreach (string skill in item.Skills) {
-                                            <div class="model-value">
-                                                <Button Color="ButtonColor.Secondary" Outline="true">@skill</Button>
-                                            </div>
-                                        }
-                                    </div>
-                                </Card>
-                            }
-                        </CardBody>
-                    }
-                </Card>
-            }
-        </CardGroup>
-    }
+    @GetCards(GetProfItems())
 </div>
 
 <br/><br/><br/><br/>
@@ -62,42 +36,57 @@
         These are projects that I worked on in my free time. Its a mix of things that I worked on to experiment with a new idea, learn a new framework, or just for fun! Some projects are completely free and open source on my GitHub- so check them out!!
     </h5>
     <br/>
-
-    @foreach (CardGroup group in GetPersonalItems()) {
-        <CardGroup>
-            @foreach (ProjectItem item in group.Items) {
-                <Card>
-                    @if (!string.IsNullOrEmpty(item.Src)) {
-                        <CardTitle class="generic-text" Style="margin-top: 5px">
-                            @item.Title
-                            @if (!string.IsNullOrEmpty(item.Github)) {
-                                <a href=@item.Github>
-                                    <Icon Name="IconName.Github" Color="IconColor.White" Style="margin-left: 5px"/>
-                                </a>
-                            }
-                        </CardTitle>
-                        <Image Src="@item.FullSrc"/>
-                        <CardText Style="margin-left: 20px; margin-top: 10px; margin-bottom: 0">@item.Description</CardText>
-                        <CardBody>
-                            @if (item.Skills.Count > 0) {
-                                <Card>
-                                    <p class="model-text">Top Skills:</p>
-                                    <div class="model-value">
-                                        @foreach (string skill in item.Skills) {
-                                            <div class="model-value">
-                                                <Button Color="ButtonColor.Secondary" Outline="true">@skill</Button>
-                                            </div>
-                                        }
-                                    </div>
-                                </Card>
-                            }
-                        </CardBody>
-                    }
-                </Card>
-            }
-        </CardGroup>
-    }
+    
+    @GetCards(GetPersonalItems())
 </div>
+
+@code {
+
+    private RenderFragment GetCards(IEnumerable<CardGroup> groups) {
+        return
+            @<div>
+                @foreach (CardGroup group in groups) {
+                    <CardGroup>
+                        @foreach (ProjectItem item in group.Items) {
+                            <Card>
+                                @if (!string.IsNullOrEmpty(item.Src)) {
+                                    <CardTitle class="generic-text" Style="margin-top: 5px">
+                                        @item.Title
+                                        @if (!string.IsNullOrEmpty(item.Github)) {
+                                            <a href=@item.Github>
+                                                <Icon Name="IconName.Github" Color="IconColor.White"
+                                                      Style="margin-left: 5px"/>
+                                            </a>
+                                        }
+                                    </CardTitle>
+                                    <Image Src="@item.FullSrc"/>
+                                    <CardBody>
+                                        <CardText
+                                            Style="margin-left: 20px; margin-top: 10px; margin-bottom: 0">@item.Description</CardText>
+                                    </CardBody>
+                                    <CardFooter>
+                                        @if (item.Skills.Count > 0) {
+                                            <Card>
+                                                <p class="model-text">Top Skills:</p>
+                                                <div class="model-value">
+                                                    @foreach (string skill in item.Skills) {
+                                                        <div class="model-value">
+                                                            <Button Color="ButtonColor.Secondary"
+                                                                    Outline="true">@skill</Button>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </Card>
+                                        }
+                                    </CardFooter>
+                                }
+                            </Card>
+                        }
+                    </CardGroup>
+                }
+            </div>;
+    }
+}
 
 @code {
     private static readonly List<ProjectItem> items = [
@@ -105,46 +94,46 @@
         new() { Src = "projects/tiny-aquarium.png", Type = Type.PROF, Skills = ["Unity", "C#/.NET", "Steam"], Title = "Tiny Aquarium", Description = "Integrated with a global team to improve application performance and readability to get the product release ready, and then worked on post release updates to maintain the software." },
         new() { Src = "projects/dungeon-tycoon.png", Type = Type.PROF, Skills = ["Unity", "C#/.NET", "Steam"], Title = "Dungeon Tycoon", Description = "Worked to improve the legacy codebase  for better reliability and readability, as well as controller based integration to allow release on more platforms." },
         new() { Src = "projects/color-surprise.png", Type = Type.PROF, Skills = ["C#/.NET", "Unity", "Firebase"], Title = "Color Surprise", Description = "I worked with a small team of programmers and artists to develop a mobile coloring game. A few of the features I worked on were ad systems, memory optimizations, and PlayFab/Firebase integration." },
-        new() { Src = "projects/space-friends.png", Type = Type.PROF, Skills = ["C#/.NET", "Unity", "Twitch API"], Title = "Space Friends", Description = "Space Friends was a game that integrated with Twitch chat so a streamer could play minigames with people in the chat in real time. I architected all the core frameworks for the game, so they could be easily extended by other programmers."},
-        new() { Src = "projects/calculator-the-game.png", Type = Type.PROF, Skills = ["C#/.NET", "Unity", "Steamworks.NET"], Title = "Calculator: The Game", Description = "I worked on the Steam port for \"Calculator: The Game\" alongside the product owner. I handled the entire conversion of the game from mobile to a standalone PC game. I also implemented some basic features using Steamworks.NET, like achievements!"},
+        new() { Src = "projects/space-friends.png", Type = Type.PROF, Skills = ["C#/.NET", "Unity", "Twitch API"], Title = "Space Friends", Description = "Space Friends was a game that integrated with Twitch chat so a streamer could play minigames with people in the chat in real time. I architected all the core frameworks for the game, so they could be easily extended by other programmers." },
+        new() { Src = "projects/calculator-the-game.png", Type = Type.PROF, Skills = ["C#/.NET", "Unity", "Steamworks.NET"], Title = "Calculator: The Game", Description = "I worked on the Steam port for \"Calculator: The Game\" alongside the product owner. I handled the entire conversion of the game from mobile to a standalone PC game. I also implemented some basic features using Steamworks.NET, like achievements!" },
         new() { Src = "projects/csvr.png", Type = Type.PROF, Skills = ["C#/.NET", "Unity", "VR/XR"], Title = "CSVR Prototype", Description = "I helped develop a prototype for the company to see what their product would look like if it was a VR game." },
-        new() { Src = "projects/my-xr-world.png", Type = Type.PROF, Skills = ["C#/.NET", "Unity", "Reddit API"], Title = "My XR World", Description = "My XR World was a PC/VR game that integrated with Stratisphere NFTs to bring creators and collectors together in a virtual world. I worked on the core game loop and the Reddit API integration."},
-        new() { Src = "projects/open-faldon.png", Type = Type.PROF, Skills = ["C#/.NET", "Unity", ".NET Server"], Title = "Open Faldon", Description = "Open Faldon is a fan recreation of the classic MMORPG Faldon. I worked on an experimental version of the game that was being built in Unity, and I also did some work on the .NET server that the game runs on to make it run a little smoother."},
-        
-        new() { Src = "projects/portfolio-website.png", Type = Type.PERSONAL, Skills = ["Blazor", "C#/.NET"], Title = "This Website!", Description = "This website was actually just an experiment in Blazor. I made it from scratch utilizing Blazor Bootstrap- just as a fun way to learn a new framework!", Github = "https://github.com/cabbagegod/portfolio"},
-        new() { Src = "projects/ch-panel.png", Type = Type.PERSONAL, Skills = ["WPF", "C#/.NET"], Title = "Cabbage Panel", Description = "CHPanel is a tool to monitor and administrate live servers running on a pterodactyl panel. It uses the built-in API to make web requests to any panel you log into. Pterodactyl utilizes docker containers to run any server software you need in a secluded environment.", Github = "https://github.com/cabbagegod/cabbage-panel"},
+        new() { Src = "projects/my-xr-world.png", Type = Type.PROF, Skills = ["C#/.NET", "Unity", "Reddit API"], Title = "My XR World", Description = "My XR World was a PC/VR game that integrated with Stratisphere NFTs to bring creators and collectors together in a virtual world. I worked on the core game loop and the Reddit API integration." },
+        new() { Src = "projects/open-faldon.png", Type = Type.PROF, Skills = ["C#/.NET", "Unity", ".NET Server"], Title = "Open Faldon", Description = "Open Faldon is a fan recreation of the classic MMORPG Faldon. I worked on an experimental version of the game that was being built in Unity, and I also did some work on the .NET server that the game runs on to make it run a little smoother." },
+
+        new() { Src = "projects/portfolio-website.png", Type = Type.PERSONAL, Skills = ["Blazor", "C#/.NET"], Title = "This Website!", Description = "This website was actually just an experiment in Blazor. I made it from scratch utilizing Blazor Bootstrap- just as a fun way to learn a new framework!", Github = "https://github.com/cabbagegod/portfolio" },
+        new() { Src = "projects/ch-panel.png", Type = Type.PERSONAL, Skills = ["WPF", "C#/.NET"], Title = "Cabbage Panel", Description = "CHPanel is a tool to monitor and administrate live servers running on a pterodactyl panel. It uses the built-in API to make web requests to any panel you log into. Pterodactyl utilizes docker containers to run any server software you need in a secluded environment.", Github = "https://github.com/cabbagegod/cabbage-panel" },
         new() { Src = "projects/master-server.png", Type = Type.PERSONAL, Skills = ["C#/.NET", "Console App"], Title = "Master Server .NET", Description = "A networking framework aimed at providing a fast, lightweight, and secure way for a master server to manage a network of sub-servers, as well as share information between them. This is used for monitoring and cross-server actions (IE, party system, moderation tools, cross-server messages, etc) in my other project Rowark. Coming soon on Github!" },
         new() { Src = "projects/rowark.png", Type = Type.PERSONAL, Skills = ["Unity", "Mirror", "PlayFab"], Title = "Rowark", Description = "Rowark is my game that is still early in development, but it is a social MMO that focuses around playing minigames for those classic MMO social interactions. It uses Mirror Networking for MMO scale client <-> server interactions, my own custom framework for game server <-> master server interactions, and PlayFab for authentication and persistent data." },
-        new() { Src = "projects/sprite-player.png", Type = Type.PERSONAL, Skills = ["Unity", "C#/.NET"], Title = "Unity Sprite Player", Description = "The Unity Sprite Player is a custom solution I made to play Sprite animations in Unity. This custom player is intended to solve some problems of Unity's default animator, such as allowing easy creation of an animation that plays at a static fps by simply setting a list of sprites and then defining your target FPS. It also has its own built-in transition system.", Github = "https://github.com/KyoshiStudios/unity-sprite-player"},
-        new() { Src = "projects/auth-server.png", Type = Type.PERSONAL, Skills = ["Unity", "C#/.NET", "PlayFab"], Title = "PlayFab Auth Server", Description = "This auth server is something I made to support player hosted game servers inside PlayFab. It allows a player to sign in and then pass a one time use token to a player server to authenticate their login session. Every client token is bound to an IP address, so a malicious player run server cannot collect these tokens and use them to connect to other servers.", Github = "https://github.com/cabbagegod/Authentication-Server"},
-        new() { Src = "projects/cabbagescape.png", Type = Type.PERSONAL, Skills = ["Java", "Gradle", "Runtime Injection"], Title = "CabbageScape", Description = "A minecraft mod that adds client-side features for the MineScape server. This mod uses code injection to inject straight into Minecraft's source code, allowing anyone to mod their game without me having to distribute Minecraft's source code- only my own code!", Github = "https://github.com/cabbagegod/cabbagescape"},
-        new() { Src = "projects/privilege-executor.png", Type = Type.PERSONAL, Skills = ["Objective-C", "Native Libraries"], Title = "Privilege Executor", Description = "A native library written in Objective-C that can be used in Unity to request the mac operating systems for admin privileges. I used this at Presta so the application could request permission to update itself.", Github = "https://github.com/cabbagegod/privilege-executor"},
-        new() { Src = "projects/chroma-quest.png", Type = Type.PERSONAL, Skills = ["Unity", "C#/.NET"], Title = "Chroma Quest: Time Warp", Description = "CQ:TW is a game jam game that I made with a couple co-workers in only 2 days. I hope to build a custom arcade cabinet soon that runs little games like these that I have made!", Github = "https://github.com/cabbagegod/ChromaQuestTimeWarp"},
+        new() { Src = "projects/sprite-player.png", Type = Type.PERSONAL, Skills = ["Unity", "C#/.NET"], Title = "Unity Sprite Player", Description = "The Unity Sprite Player is a custom solution I made to play Sprite animations in Unity. This custom player is intended to solve some problems of Unity's default animator, such as allowing easy creation of an animation that plays at a static fps by simply setting a list of sprites and then defining your target FPS. It also has its own built-in transition system.", Github = "https://github.com/KyoshiStudios/unity-sprite-player" },
+        new() { Src = "projects/auth-server.png", Type = Type.PERSONAL, Skills = ["Unity", "C#/.NET", "PlayFab"], Title = "PlayFab Auth Server", Description = "This auth server is something I made to support player hosted game servers inside PlayFab. It allows a player to sign in and then pass a one time use token to a player server to authenticate their login session. Every client token is bound to an IP address, so a malicious player run server cannot collect these tokens and use them to connect to other servers.", Github = "https://github.com/cabbagegod/Authentication-Server" },
+        new() { Src = "projects/cabbagescape.png", Type = Type.PERSONAL, Skills = ["Java", "Gradle", "Runtime Injection"], Title = "CabbageScape", Description = "A minecraft mod that adds client-side features for the MineScape server. This mod uses code injection to inject straight into Minecraft's source code, allowing anyone to mod their game without me having to distribute Minecraft's source code- only my own code!", Github = "https://github.com/cabbagegod/cabbagescape" },
+        new() { Src = "projects/privilege-executor.png", Type = Type.PERSONAL, Skills = ["Objective-C", "Native Libraries"], Title = "Privilege Executor", Description = "A native library written in Objective-C that can be used in Unity to request the mac operating systems for admin privileges. I used this at Presta so the application could request permission to update itself.", Github = "https://github.com/cabbagegod/privilege-executor" },
+        new() { Src = "projects/chroma-quest.png", Type = Type.PERSONAL, Skills = ["Unity", "C#/.NET"], Title = "Chroma Quest: Time Warp", Description = "CQ:TW is a game jam game that I made with a couple co-workers in only 2 days. I hope to build a custom arcade cabinet soon that runs little games like these that I have made!", Github = "https://github.com/cabbagegod/ChromaQuestTimeWarp" },
     ];
-    
+
     private static IEnumerable<CardGroup> GetProfItems() {
         IEnumerable<ProjectItem> newItems = items.Where(item => item.Type == Type.PROF);
         return RawItemsToGroups(newItems.ToList());
     }
-    
+
     private static IEnumerable<CardGroup> GetPersonalItems() {
         IEnumerable<ProjectItem> newItems = items.Where(item => item.Type == Type.PERSONAL);
         return RawItemsToGroups(newItems.ToList());
     }
-    
+
     private static List<CardGroup> RawItemsToGroups(List<ProjectItem> itemsQuery) {
         //Split the items into groups of 4
         List<CardGroup> groups = [];
         for (int i = 0; i < itemsQuery.Count; i += 3) {
             CardGroup group = new(itemsQuery.GetRange(i, Math.Min(3, itemsQuery.Count - i)));
-            if(group.Items.Count != 3)
+            if (group.Items.Count != 3)
                 group.Items.AddRange(Enumerable.Repeat(new ProjectItem(), 3 - group.Items.Count));
             groups.Add(group);
         }
-        
+
         return groups;
     }
-    
+
     private class ProjectItem {
         public string FullSrc => $"images/{Src}";
         public string Src { get; init; } = string.Empty;
@@ -158,7 +147,7 @@
     private class CardGroup(List<ProjectItem> items) {
         public List<ProjectItem> Items { get; init; } = items;
     }
-    
+
     private enum Type {
         PROF,
         PERSONAL
