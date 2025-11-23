@@ -2,7 +2,8 @@
 
 <PageTitle>Portfolio</PageTitle>
 
-<div id="top" class="outer" style="background-size: contain; background-image: url('images/background.png'); background-repeat: no-repeat; width: 100%; height: 0; padding-top: 66.64%; position: relative;">
+<div id="top" class="outer"
+     style="background-size: contain; background-image: url('images/background.png'); background-repeat: no-repeat; width: 100%; height: 0; padding-top: 66.64%; position: relative;">
     <div style="position: absolute;top:30%; bottom:0; left:0; right:0;">
         <h1 style="font-size: 90px" class="generic-text">Discover Henry</h1>
         <h2 class="generic-text">
@@ -19,10 +20,11 @@
         Professional Projects
     </h2>
     <h5 class="generic-text">
-        These are some of my top projects that I have worked on in a professional setting. Some information may be omitted due to NDAs, and all images are acquired from public sources.
+        These are some of my top projects that I have worked on in a professional setting. Some information may be
+        omitted due to NDAs, and all images are acquired from public sources.
     </h5>
     <br/>
-    
+
     @GetCards(GetProfItems())
 </div>
 
@@ -33,15 +35,16 @@
         Personal Projects
     </h2>
     <h5 class="generic-text">
-        These are projects that I worked on in my free time. Its a mix of things that I worked on to experiment with a new idea, learn a new framework, or just for fun! Some projects are completely free and open source on my GitHub- so check them out!!
+        These are projects that I worked on in my free time. Its a mix of things that I worked on to experiment with a
+        new idea, learn a new framework, or just for fun! Some projects are completely free and open source on my
+        GitHub- so check them out!!
     </h5>
     <br/>
-    
+
     @GetCards(GetPersonalItems())
 </div>
 
 @code {
-
     private RenderFragment GetCards(IEnumerable<CardGroup> groups) {
         return
             @<div>
